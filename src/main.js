@@ -4,7 +4,7 @@
 // This is done with the transform "aliasify". For the config, see package.json
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import App from './App.vue'
+import App from './App'
 
 Vue.use(VueRouter)
 
@@ -13,6 +13,7 @@ const router = new VueRouter(routes)
 
 new Vue({
   el: '#app',
-  render: (h) => h(App),
+  template: `<App/>`,
+  components: {App},
   router
 })

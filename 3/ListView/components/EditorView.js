@@ -27,12 +27,16 @@ Vue.component('editor-view', {
       }
     }
   },
+  computed: {
+    tagsArr() {
+      // input.tags の文字列を空白で区切って配列に変換する
+      return this.input.tags.trim() !== '' ? this.input.tags.trim().split(/\s+/) : []
+    }
+  },
   methods: {
     save() {
       // this.input のクローンを生成する
-      const data = Object.assign({}, this.input)
-      // tags の文字列を空白で区切って配列に変換する
-      data.tags = data.tags.trim() !== '' ? data.tags.trim().split(' ') : []
+      const data = Object.assign({}, this.input, {tags: this.tagsArr})
       // 'add'イベントを自身にトリガーする
       this.$emit('add', data)
     }

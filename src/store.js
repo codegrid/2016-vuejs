@@ -10,7 +10,7 @@ export const actions = {
         return prev < memo.id ? memo.id : prev
       }, 0) + 1
     newMemo.id = id
-    newMemo.tags = newMemo.tags.trim().split(' ')
+    newMemo.tags = newMemo.tags.trim() !== '' ? newMemo.tags.trim().split(/\s+/) : []
     state.memos.push(newMemo)
   },
   removeMemo(id) {
@@ -24,7 +24,7 @@ export const actions = {
     const index = state.memos.findIndex((memo) => {
       return memo.id === newMemo.id
     })
-    newMemo.tags = newMemo.tags.trim().split(' ')
+    newMemo.tags = newMemo.tags.trim() !== '' ? newMemo.tags.trim().split(/\s+/) : []
     state.memos.splice(index, 1, newMemo)
   }
 }

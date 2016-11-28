@@ -1,7 +1,9 @@
 const vm = new Vue({
   el: '#app',
-  data: {
-    memos: []
+  data() {
+    return {
+      memos: []
+    }
   },
   template: `
     <div>

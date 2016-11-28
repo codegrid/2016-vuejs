@@ -1,11 +1,13 @@
 const vm = new Vue({
   el: '#app',
-  data: {
-    memo: {
-      id: 1,
-      text: '',
-      date: '',
-      tags: ''
+  data() {
+    return {
+      memo: {
+        id: 1,
+        text: '',
+        date: '',
+        tags: ''
+      }
     }
   },
   template: `

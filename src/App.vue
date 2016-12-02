@@ -1,63 +1,48 @@
-<style scoped lang="scss">
-  @import '../node_modules/font-awesome/css/font-awesome.css';
-  .app {
-    height: 100%;
-    display: flex;
-  }
-  .menu {
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    background-color: #555;
-    color: #fff;
-  }
-  .contents {
-    height: 100%;
-    flex-grow: 1;
-    overflow: scroll;
-    box-sizing: border-box;
-  }
-  .router-link {
-    color: #fff;
-    text-decoration: none;
-    display: inline-block;
-    padding: 10px;
-    font-weight: normal;
-    font-size: 14px;
-    &:link {
-      color: inherit;
-    }
-  }
-  .router-link-active {
-    background-color: #fcfcfc;
+<style lang="scss">
+  @import '../static/styles.css';
+  html, body {
     color: #555;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
   }
-  @media all and (max-width: 480px) {
-
+  #app {
+    height: 100%;
+    display: flex;
+    .contents {
+      height: 100%;
+      flex-grow: 1;
+      box-sizing: border-box;
+    }
   }
 </style>
 <template>
-  <div id="app" class="app">
-    <nav class="menu">
-      <router-link to="/latest" class="router-link">
-        最新
-      </router-link>
-      <router-link to="/list" class="router-link">
-        一覧
-      </router-link>
-      <router-link to="/new" class="router-link">
-        新規
-      </router-link>
-    </nav>
-    <div class="contents">
-      <router-view></router-view>
-    </div>
+  <div id="app">
+    <nav-link></nav-link>
+    <router-view class="contents"
+      @navigation="navigation">
+    </router-view>
   </div>
 </template>
 
-<script>
-import * as store from './store'
+<script lang="babel">
+import NavLink from './components/NavLink'
+import store from './store'
+
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      sharedState: store.state
+    }
+  },
+  methods: {
+    navigation(location) {
+      this.$router.push(location)
+    }
+  },
+  components: {
+    NavLink
+  }
 }
 </script>

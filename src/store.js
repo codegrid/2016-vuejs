@@ -1,53 +1,48 @@
-import memos from './data'
-export const state = {
+import memos from './memos'
+const state = {
   memos
 }
 
-export const actions = {
-  addMemo(newMemo) {
-    newMemo = Object.assign({}, newMemo)
-    const id = state.memos.reduce((prev, memo) => {
-        return prev < memo.id ? memo.id : prev
+const util = {
+  // memos の中のメモで一番大きい id に 1 を足した値を返す
+  nextId(memos) {
+    return memos.reduce((id, memo) => {
+        return id < memo.id ? memo.id : id
       }, 0) + 1
-    newMemo.id = id
-    newMemo.tags = newMemo.tags.trim() !== '' ? newMemo.tags.trim().split(/\s+/) : []
-    state.memos.push(newMemo)
   },
-  removeMemo(id) {
-    const index = state.memos.findIndex((memo) => {
-      return memo.id === id
+  findIndex(memos, id) {
+    return memos.findIndex((memo) => {
+      return memo.id === parseInt(id, 10)
     })
-    state.memos.splice(index, 1)
-  },
-  updateMemo(newMemo) {
-    newMemo.id = parseInt(newMemo.id, 10)
-    const index = state.memos.findIndex((memo) => {
-      return memo.id === newMemo.id
-    })
-    newMemo.tags = newMemo.tags.trim() !== '' ? newMemo.tags.trim().split(/\s+/) : []
-    state.memos.splice(index, 1, newMemo)
   }
 }
 
-export const getters = {
-  memoById(id) {
-    return state.memos.find((memo) => {
-      return memo.id === parseInt(id, 10)
-    })
+// state に変更を加える処理は mutations で行う
+const mutations = {
+  addMemo(newMemo) {
+    newMemo.id = util.nextId(state.memos)
+    state.memos.push(newMemo)
   },
-  nextId() {
-    return state.memos.reduce((prev, memo) => {
-      return prev < memo.id ? memo.id : prev
-    }, 0) + 1
+  removeMemo(id) {
+    const index = util.findIndex(memos, id)
+    state.memos.splice(index, 1)
   },
-  allTags() {
-    return state.memos.reduce((tags, memo) => {
-      memo.tags.forEach((tag) => {
-        if (!tags.includes(tag)) {
-          tags.push(tag)
-        }
-      })
-      return tags
-    }, [])
+  updateMemo(memo) {
+    const index = util.findIndex(memos, memo.id)
+    state.memos.splice(index, 1, memo)
   }
+}
+
+// commitを経由してmutationsを呼ぶ
+const commit = (mutationsName, ...args) => {
+  // 存在しないmutationsが指定されたらエラー
+  if (!mutations[mutationsName]) {
+    throw Error(`${mutationsName} is not defined in mutations.`)
+  }
+  mutations[mutationsName](...args)
+}
+
+export default {
+  state,
+  commit
 }

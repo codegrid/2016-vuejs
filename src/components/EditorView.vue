@@ -1,127 +1,67 @@
-<style scoped lang="scss">
-  .input-view {
-    flex-grow: 1;
-    border-radius: 2px;
-    height: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    padding: 10px;
-    &-buttons {
-      justify-content: flex-end;
-      display: flex;
-      padding: 10px 0 0;
-    }
-    &-button {
-      margin-left: 10px;
-      background-color: #555;
-      color: #fff;
-      cursor: pointer;
-      border: none;
-      width: 100px;
-      line-height: 30px;
-    }
-    &-item {
-      box-shadow: 0 1px 0 rgba(#fff, 1);
-      background-color: #fff;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-      label {
-        color: #555;
-        font-size: 11px;
-        text-align: right;
-        min-width: 33px;
-      }
-      input {
-        flex-grow: 1;
-        box-sizing: border-box;
-        padding: 10px 5px;
-        outline-offset: -4px;
-        outline-width: 1px;
-        border: 1px solid #b3b3b3;
-        &[disabled] {
-          color: #999;
-        }
-      }
-    }
-  }
-</style>
-
 <template>
-  <div class="input-view">
-    <div class="input-view-item" v-if="id">
-      <label>id：</label>
-      <input v-model="id" placeholder="id" disabled>
+  <div class="editor-view">
+    <div v-if="input.id">
+      <label>ID：</label>
+      <input v-model="input.id" disabled>
     </div>
-    <div class="input-view-item">
+    <div>
       <label>内容：</label>
-      <input v-model="input.text" placeholder="メモの内容">
+      <input v-model="input.text" placeholder="メモのタイトル">
     </div>
-    <div class="input-view-item">
+    <div>
       <label>日付：</label>
       <input type="date" v-model="input.date">
     </div>
-    <div class="input-view-item">
+    <div>
       <label>タグ：</label>
       <input v-model="input.tags" placeholder="空白区切りで指定">
     </div>
-    <header class="input-view-buttons">
-      <button @click="cancel" class="input-view-button">キャンセル</button>
-      <button @click="save" class="input-view-button">保存</button>
-    </header>
+    <div>
+      <button @click="save">保存</button>
+    </div>
   </div>
 </template>
 
 <script lang="babel">
-  import * as store from '../store'
   export default{
     props: {
-      id: Number
+      memo: Object,
+      isEdit: Boolean
+    },
+    watch: {
+      $route: 'setMemo'
+    },
+    mounted() {
+      this.setMemo()
     },
     data() {
       return {
         input: {
           text: '',
-          tags: '',
-          date: ''
+          date: '',
+          tags: ''
         }
       }
     },
-    watch: {
-      'id': 'setMemo'
-    },
-    mounted() {
-      this.setMemo()
+    computed: {
+      tagsArr() {
+        return this.input.tags.trim() !== '' ? this.input.tags.trim().split(/\s+/) : []
+      }
     },
     methods: {
+      save() {
+        const data = Object.assign({}, this.input, {tags: this.tagsArr})
+        this.$emit(this.isEdit ? 'update': 'add', data)
+      },
       setMemo() {
-        if (this.id !== undefined) {
-          const memo = store.getters.memoById(this.id)
+        if (this.memo) {
           this.input = {
-            id: this.id,
-            text: memo.text,
-            date: memo.date,
-            tags: memo.tags.join(' ')
+            id: this.memo.id,
+            text: this.memo.text,
+            date: this.memo.date,
+            tags: this.memo.tags.join(' ')
           }
         }
-      },
-      save() {
-        if (this.id) {
-          store.actions.updateMemo(this.input)
-        }
-        else {
-          store.actions.addMemo(this.input)
-        }
-        this.complete()
-      },
-      cancel() {
-        this.$router.go(-1)
-      },
-      complete() {
-        this.$router.push('/list')
       }
     }
   }

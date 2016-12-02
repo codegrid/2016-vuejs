@@ -1,26 +1,23 @@
-import Latest from './container/Latest.vue'
-import List from './container/List.vue'
-import NewMemo from './container/NewMemo.vue'
-import Edit from './container/Edit.vue'
+import Root from './page/Root'
+import Items from './page/Items'
+import Add from './page/Add'
+import EditorView from './components/EditorView'
 
 export default {
   mode: 'history',
   routes: [
     {
-      path: '/list', component: List, children: [
+      path: '/', component: Root, name: 'root'
+    },
+    {
+      path: '/add', component: Add, name: 'add'
+    },
+    {
+      path: '/items', component: Items, name: 'items', children: [
         {
-          path: ':id', component: Edit
+          path: ':id', component: EditorView, name: 'item', meta: {edit: true}
         }
       ]
-    },
-    {
-      path: '/latest', component: Latest
-    },
-    {
-      path: '/new', component: NewMemo
-    },
-    {
-      path: '*',  redirect: '/latest'
     }
   ]
 }

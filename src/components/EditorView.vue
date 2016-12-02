@@ -17,6 +17,7 @@
       <input v-model="input.tags" placeholder="空白区切りで指定">
     </div>
     <div>
+      <button @click="cancel">戻る</button>
       <button @click="save">保存</button>
     </div>
   </div>
@@ -52,6 +53,9 @@
       save() {
         const data = Object.assign({}, this.input, {tags: this.tagsArr})
         this.$emit(this.isEdit ? 'update': 'add', data)
+      },
+      cancel() {
+        this.$router.push({name: 'items'})
       },
       setMemo() {
         if (this.memo) {

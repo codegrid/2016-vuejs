@@ -7,6 +7,9 @@ export default {
   mode: 'history',
   routes: [
     {
+      path: '/index.html', redirect: {name: 'root'}
+    },
+    {
       path: '/', component: Root, name: 'root'
     },
     {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <list-view :memos="memos" @remove="remove" :count="3" sort="latest"></list-view>
+    <list-view :memos="memos" @remove="remove" :count="count" :sort="sort"></list-view>
     <router-link :to="{name: 'items'}">すべて見る</router-link>
   </div>
 </template>
@@ -10,6 +10,12 @@
   export default{
     props: {
       memos: Array
+    },
+    data() {
+      return {
+        count: 3,
+        sort: 'latest'
+      }
     },
     methods: {
       remove(id) {

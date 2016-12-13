@@ -26,11 +26,10 @@
 <script lang="babel">
   export default{
     props: {
-      memo: Object,
-      isEdit: Boolean
+      memo: Object
     },
     watch: {
-      $route: 'setMemo'
+      memo: 'setMemo'
     },
     mounted() {
       this.setMemo()
@@ -52,6 +51,12 @@
     methods: {
       save() {
         const data = Object.assign({}, this.input, {tags: this.tagsArr})
+        if (this.memo) {
+          this.$emit('update', data)
+        }
+        else {
+          this.$emit('add', data)
+        }
         this.$emit(this.isEdit ? 'update': 'add', data)
       },
       cancel() {

@@ -18,7 +18,7 @@ export default {
     {
       path: '/items', component: Items, name: 'items', children: [
         {
-          path: ':id', component: EditorView, name: 'item', meta: {edit: true}
+          path: ':id', component: EditorView, name: 'item'
         }
       ]
     }

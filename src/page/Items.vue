@@ -38,7 +38,7 @@
         :tags="privateState.tags">
       </list-view>
       </div>
-    <router-view :memo="selectedMemo" :isEdit="isEdit" @update="update"></router-view>
+    <router-view :memo="selectedMemo" @update="update"></router-view>
   </div>
 </template>
 
@@ -68,9 +68,6 @@
           })
           return memo
         }
-      },
-      isEdit() {
-        return this.$route.meta.edit
       }
     },
     methods: {

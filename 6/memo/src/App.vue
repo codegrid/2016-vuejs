@@ -77,8 +77,9 @@ export default {
       this.memos.splice(index, 1)
     },
     update(data) {
+      const id = parseInt(data.id, 10)
       const index = this.memos.findIndex((memo) => {
-        return memo.id === parseInt(data.id, 10)
+        return memo.id === id
       })
       this.memos.splice(index, 1, data)
     }

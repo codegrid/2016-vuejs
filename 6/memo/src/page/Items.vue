@@ -31,10 +31,10 @@
     },
     computed: {
       selectedMemo() {
-        const id = this.$route.params.id
-        if (id !== undefined) {
+        if (this.$route.params.id !== undefined) {
+          const id = parseInt(this.$route.params.id, 10)
           const memo = this.memos.find((memo) => {
-            return memo.id === parseInt(id, 0)
+            return memo.id === id
           })
           return memo
         }
